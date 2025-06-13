@@ -51,7 +51,7 @@ const TOOLS = {
   ]
 };
 
-export default function SmartSuggestions({ promptType, content }: SmartSuggestionsProps) {
+export default function SmartSuggestions({ promptType }: SmartSuggestionsProps) {
   const tools = TOOLS[promptType] || [];
 
   return (
@@ -73,11 +73,14 @@ export default function SmartSuggestions({ promptType, content }: SmartSuggestio
             className="p-4 rounded-lg border border-gray-200 hover:border-purple-300 transition-colors"
           >
             <div className="flex items-center space-x-3">
-              <img
-                src={tool.icon}
-                alt={tool.name}
-                className="w-8 h-8"
-              />
+              <div className="relative w-8 h-8">
+                <Image
+                  src={tool.icon}
+                  alt={tool.name}
+                  fill
+                  className="object-contain"
+                />
+              </div>
               <div>
                 <h4 className="font-medium">{tool.name}</h4>
                 <p className="text-sm text-gray-600">{tool.description}</p>

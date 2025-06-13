@@ -6,27 +6,55 @@ interface PromptInputProps {
   onPromptSubmit: (prompt: string, type: 'text' | 'image' | 'website') => void;
 }
 
+interface SpeechRecognitionEvent {
+  results: Array<{
+    [key: number]: {
+      transcript: string;
+    };
+  }>;
+}
+
+interface SpeechRecognitionError {
+  error: string;
+}
+
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: (event: SpeechRecognitionEvent) => void;
+  onerror: (event: SpeechRecognitionError) => void;
+  start: () => void;
+  stop: () => void;
+}
+
+declare global {
+  interface Window {
+    webkitSpeechRecognition: new () => SpeechRecognition;
+  }
+}
+
 export default function PromptInput({ onPromptSubmit }: PromptInputProps) {
   const [prompt, setPrompt] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [language, setLanguage] = useState<'en' | 'hi'>('en');
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   const startRecording = () => {
     if ('webkitSpeechRecognition' in window) {
-      recognitionRef.current = new (window as any).webkitSpeechRecognition();
+      recognitionRef.current = new window.webkitSpeechRecognition();
       recognitionRef.current.continuous = true;
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = language === 'hi' ? 'hi-IN' : 'en-US';
 
-      recognitionRef.current.onresult = (event: any) => {
+      recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
         const transcript = Array.from(event.results)
-          .map((result: any) => result[0].transcript)
+          .map((result) => result[0].transcript)
           .join('');
         setPrompt(transcript);
       };
 
-      recognitionRef.current.onerror = (event: any) => {
+      recognitionRef.current.onerror = (event: SpeechRecognitionError) => {
         console.error('Speech recognition error:', event.error);
         setIsRecording(false);
       };

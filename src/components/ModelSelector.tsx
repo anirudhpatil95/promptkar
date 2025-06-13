@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 interface ModelSelectorProps {
   selectedModel: string;
@@ -49,11 +50,14 @@ export default function ModelSelector({ selectedModel, onModelSelect }: ModelSel
             }`}
           >
             <div className="flex items-center space-x-3">
-              <img
-                src={model.icon}
-                alt={model.name}
-                className="w-8 h-8"
-              />
+              <div className="relative w-8 h-8">
+                <Image
+                  src={model.icon}
+                  alt={model.name}
+                  fill
+                  className="object-contain"
+                />
+              </div>
               <div className="text-left">
                 <h4 className="font-medium">{model.name}</h4>
                 <p className="text-sm text-gray-600">{model.description}</p>
