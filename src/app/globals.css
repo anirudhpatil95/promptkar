@@ -3,20 +3,20 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-rgb: 255, 255, 255;
+  --foreground: #000000;
+  --background: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-rgb: 0, 0, 0;
+    --foreground: #ffffff;
+    --background: #000000;
   }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
+  color: var(--foreground);
+  background: var(--background);
 }
 
 @layer base {
@@ -68,7 +68,7 @@ body {
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-[hsl(var(--border))];
   }
   body {
     @apply bg-background text-foreground;

@@ -1,10 +1,9 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
 interface ModelSelectorProps {
   selectedModel: string;
-  onModelSelect: (model: string) => void;
+  onModelChange: (model: string) => void;
 }
 
 const MODELS = [
@@ -12,23 +11,23 @@ const MODELS = [
     id: 'gpt-4',
     name: 'GPT-4',
     description: 'Most capable model, best for complex tasks',
-    icon: '/tools/chatgpt.svg'
+    icon: '/models/gpt4.svg'
   },
   {
-    id: 'claude-3',
-    name: 'Claude 3',
-    description: 'Excellent for analysis and writing',
-    icon: '/tools/claude.svg'
+    id: 'claude-3-opus',
+    name: 'Claude 3 Opus',
+    description: 'Advanced reasoning and analysis',
+    icon: '/models/claude.svg'
   },
   {
     id: 'gemini-pro',
     name: 'Gemini Pro',
-    description: 'Great for creative content',
-    icon: '/tools/gemini.svg'
+    description: 'Google\'s latest AI model',
+    icon: '/models/gemini.svg'
   }
 ];
 
-export default function ModelSelector({ selectedModel, onModelSelect }: ModelSelectorProps) {
+export default function ModelSelector({ selectedModel, onModelChange }: ModelSelectorProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -40,12 +39,12 @@ export default function ModelSelector({ selectedModel, onModelSelect }: ModelSel
         {MODELS.map((model) => (
           <motion.button
             key={model.id}
+            onClick={() => onModelChange(model.id)}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => onModelSelect(model.id)}
-            className={`p-4 rounded-lg border-2 transition-colors ${
+            className={`p-4 rounded-lg border transition-colors ${
               selectedModel === model.id
-                ? 'border-purple-500 bg-purple-50'
+                ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
                 : 'border-gray-200 hover:border-purple-300'
             }`}
           >
@@ -60,7 +59,9 @@ export default function ModelSelector({ selectedModel, onModelSelect }: ModelSel
               </div>
               <div className="text-left">
                 <h4 className="font-medium">{model.name}</h4>
-                <p className="text-sm text-gray-600">{model.description}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {model.description}
+                </p>
               </div>
             </div>
           </motion.button>
